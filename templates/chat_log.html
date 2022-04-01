@@ -1,0 +1,25 @@
+{% extends "base.html" %} 
+{% block title %} Home page {% endblock %}
+ {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+ <title>Investor Chat</title>
+
+  {% endblock %}
+{% block content %}
+
+
+<form action="/chat">
+    <div>
+        <label>Enter your username:</label>
+        <input type="text" name="username">
+    </div>
+    <div>
+        <label>Enter room id:</label>
+        <input type="text" name="room">
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+ {% endblock %}

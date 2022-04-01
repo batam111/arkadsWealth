@@ -1,0 +1,56 @@
+*Lately banks and stockbrokers have introduced 
+financial advice with the use of a robot advisor
+*Until today an investor that wanted to manage a portfolio
+had to come in contact with a stock broker that would ask him 
+questions that would help the professional understand the financial needs 
+in regards to risk.
+*A few of the questions would include how much would the new investor 
+was willing to invest, what types of investments the invest is most interested in,
+what risk he's willing to take, the time frame, and his financial situation and goals.
+*After the acquaintance, the stock broker will create a portfolio that fits 
+that investor best
+
+*The total equity that is managed in the US is 24.7 Trillion dollars out of which
+750 billion dollars are managed by financial automatic robots.
+*The population that is being targeted to is low income and people that have 
+digital access. 
+*On most digital robot advisors there are 5-15 questions that decide the risk level of 
+the individual.
+*There are about 3-5 risk levels, some systems have more.
+*Gathering phone information to decide the risk level (For example one company 
+identified one of it's customers as a casino gambeler) 
+*About 40% of the pltaforms use indexes ETF 
+* Most of the robots use the Markowitz model and CAPM as algorithms for choosing portfolios.
+*Mainly Indexes are being used and not individual stocks. 
+*On average there's a 2% fee rate for these systems 
+
+A social platform for rating and financial advice using web2.0
+
+Etoro - A social trading and multi-asset brokerage company 
+The user can keep follow investing alogirthms and ask for one of them to be used
+on his personal portfolio
+
+*A solution to the problem : 
+ - The project combines the core of futuristic technologies and allows 
+   the use of advanced financial systems ( Innovation and Fintech) 
+*The ability to add groups of friends that will work in a collaborative manner 
+that is called (Wiki combined investment)
+* The technological world is looking for the optimal solution of a combined 
+portfolio that allows a social academic platform
+
+*System logging and creating automatic operations in the portfolios of others in the 
+finance area and the stock market.
+*Using and suggestions based on financial models that were developed in a social platform 
+with the aids of academic studnets. 
+*Developing open sourced code for modules. 
+*Academic knowledge that is concentrade in one spot 
+*A decidated forum for the stock market that has experts in the finance world
+*Tools for stock market analysis
+
+*Our project Arkad Wealth show the abilities of the social platform. The marketing edge 
+that we purpose is financial advice that includes all other generations.
+*In fact we are an academic social platform of students and academics that was developed 
+in the southern district. That is built on open sourced code .
+ *In the digital and Automation age we strive in the combined effort of social responsiblity 
+accesability and transperancy that is open for all.
+*The porject will be done by attention to detail and ranking risk profiles of indviduals.

@@ -1,0 +1,185 @@
+{% extends "base.html" %} 
+{% block head %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+ 
+<script defer src="{{ url_for('static', filename='javascript/validate_stocks.js') }}"> </script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}"/>
+
+<script type="text/javascript" src="{{ url_for('static', filename='javascript/jquery-1.10.2.min.js') }}"></script>
+
+ {% endblock %}
+
+{% block content %}
+<body>
+<div class="container">
+
+<div class="page-header">
+    <h1>Arkad Wealth FAQ<small>  everything you need to know</small></h1>
+</div>
+
+<!-- Bootstrap FAQ - START -->
+<div class="container">
+    <br />
+    <br />
+    <br />
+
+    <div class="alert alert-warning" role="alert">
+        This section contains most of the information needed for using  <strong>Arkad Wealth</strong> If you cannot find an answer to your question 
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        make sure to contact us.
+    </div>
+
+    <br />
+
+    <div class="panel-group" id="accordion">
+        <div class="faqHeader">Customers</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">When can I invest with Arkad Wealth</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse ">
+                <div class="panel-body">
+                    Our website is currently used only for researchers and investors, but stay tuned for future updates
+                </div>
+            </div>
+        </div>
+       <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">What does the Customer version of Arkad Wealth do ? </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    For now Arkad Wealth for customers provides limited functionality, we've used the indexes ( SPY, IEI, LQD , QQQ) 
+                    To generate the 3 Portfolios that customers can choose ( Read disclaimer first)
+                  
+                </div>
+            </div>
+        </div>
+       
+
+        <div class="faqHeader">Investors</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">What stocks can I use?</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Any stock that is listed in Yahoo! Finance is available for use if you are not sure use this <a href="https://finance.yahoo.com/lookup"> link </a>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">What dates can I use ?</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    When choosing a ticker, make sure the dates you are choosing are valid ( Meaning the stock was out between those dates)<br>
+                    e.g if I want to use Arkad wealth to get all the data for FB I would first look at the IPO of FB and choose dates from that date until today (May 18, 2012 simply googling FB IPO)
+                  
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">How many stocks can I use?</a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Minimum 2 stocks and for now Arkad wealth allows only 10 maximum stocks for building your portfolios
+                    <br />
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">What does the graph the was generated means?</a>
+                </h4>
+            </div>
+            <div id="collapseEight" class="panel-collapse collapse">
+                <div class="panel-body">
+                    The Graph generated by Arkad Wealth shows a distribution of all the different portfolios that were simulated 
+                    using different weights for each stock, the 3 most interesting stocks are highlighted in Green Yellow and red
+                    <ul>
+                        <li><strong>Green</strong> - Is the highest Sharpe ratio Portfolio <a href= " https://www.investopedia.com/terms/s/sharperatio.asp#:~:text=The%20Sharpe%20ratio%20was%20developed,of%20volatility%20or%20total%20risk.">Read more about sharpe ratio</a></li>
+                        <li><strong>Yellow</strong>- Is the safest portfolio that was generated by Arkad wealth meaning it's the portfolio which had the lowest risk between the dates selected</li>
+                        <li><strong>Red</strong> - Is the portfolio which had the highest returns between the dates that were selected</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="faqHeader">Developers</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">How does Arkad Wealth work?</a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse">
+                <div class="panel-body">
+                    We use Python as the backend application to run the calculations that are used in generating the graphs and finding 
+                    the optimal portfolios. We used the following libraries : 
+                    <ul>
+                     <li><strong>Yfinance </strong>for pulling the financial data for each stock </li>
+                     <li> <strong>Matplotlib </strong> for generating the graph</li>
+                     <li> <strong>Pandas </strong>For financial data manipulation</li>
+                     <br><br><br>
+                </div>
+            </div>
+        </div>
+        
+</body>        
+<style>
+body{
+ background-color: lightblue;
+}
+    .faqHeader {
+        font-size: 27px;
+        margin: 20px;
+    }
+
+    .panel-heading [data-toggle="collapse"]:after {
+        font-family: 'Glyphicons Halflings';
+        content: "\e072"; /* "play" icon */
+        float: right;
+        color: #F58723;
+        font-size: 18px;
+        line-height: 22px;
+        /* rotate "play" icon from > (right arrow) to down arrow */
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .panel-heading [data-toggle="collapse"].collapsed:after {
+        /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        color: #454444;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,314 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  ApplicationName:
+    Description: Name of the EB application
+    Type: String
+    Default: ArkadsWealthApplication
+  EbMinInstances:
+    Description: Minimum number of instances in the EB autoscaling group
+    Type: Number
+    Default: 1
+  EbMaxInstances:
+    Description: Maximum number of instances in the EB autoscaling group
+    Type: Number
+    Default: 1
+  EbInstanceType:
+    Description: Instance type which is used by EB
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.nano
+      - t2.micro
+  SolutionStackName:
+    Description: EB solution stack name, choose from https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html
+    Type: String
+    Default: 64bit Amazon Linux 2018.03 v2.9.13 running Python 3.6
+  PrivateSubnetsRequired:
+    Description: Configure stack whether private subnets are required or not
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+Conditions:  
+  PrivateSubnetsRequiredCondition: !Equals [!Ref PrivateSubnetsRequired, "true"]
+
+    
+Resources:
+  EbApplication:
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      Description: !Ref ApplicationName
+      ApplicationName: !Ref ApplicationName
+  EbApplicationConfigurationTemplate:
+    Type: AWS::ElasticBeanstalk::ConfigurationTemplate
+    Properties:
+      ApplicationName: !Ref EbApplication
+      OptionSettings:
+      - Namespace: aws:autoscaling:asg
+        OptionName: MinSize
+        Value: !Ref EbMinInstances
+      - Namespace: aws:autoscaling:asg
+        OptionName: MaxSize
+        Value: !Ref EbMaxInstances
+      - Namespace: aws:elasticbeanstalk:environment
+        OptionName: EnvironmentType
+        Value: LoadBalanced
+      - Namespace: aws:elasticbeanstalk:environment
+        OptionName: LoadBalancerType
+        Value: application
+      - Namespace: aws:elasticbeanstalk:cloudwatch:logs
+        OptionName: StreamLogs
+        Value: "true"
+      - Namespace: aws:elasticbeanstalk:cloudwatch:logs
+        OptionName: DeleteOnTerminate
+        Value: "true"
+      - Namespace: aws:ec2:instances
+        OptionName: InstanceTypes
+        Value: !Ref EbInstanceType
+      - Namespace: aws:autoscaling:launchconfiguration
+        OptionName: IamInstanceProfile
+        Value: !Ref InstanceProfile
+      - Namespace: aws:ec2:vpc
+        OptionName: VPCId
+        Value: !Ref VPC
+      - Namespace: aws:ec2:vpc
+        OptionName: Subnets
+        Value: !Join [',', [!Ref PublicSubnetA, !Ref PublicSubnetB]]
+      - Namespace: aws:ec2:vpc
+        OptionName: ELBSubnets
+        Value: !Join [',', [!Ref PublicSubnetA, !Ref PublicSubnetB]]
+      - Namespace: aws:autoscaling:launchconfiguration
+        OptionName: SecurityGroups
+        Value: !Ref WebTierSg
+      - Namespace: aws:elbv2:loadbalancer
+        OptionName: ManagedSecurityGroup
+        Value: !Ref AlbSg
+      - Namespace: aws:elbv2:loadbalancer
+        OptionName: SecurityGroups
+        Value: !Ref AlbSg
+      SolutionStackName: !Ref SolutionStackName
+  EbPrimaryEnvironment:
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      ApplicationName: !Ref EbApplication
+      Description: Primary environment
+      EnvironmentName: !Join ['-', [!Ref EbApplication, 'primary-env']]
+      TemplateName: !Ref EbApplicationConfigurationTemplate
+  InstanceProfileRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+      RoleName: "aws-elasticbeanstalk-web-instanceprofile-role"
+  InstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !Ref 'InstanceProfileRole'
+      InstanceProfileName: "aws-elasticbeanstalk-web-instanceprofile"
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.1.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+      - Key: Name
+        Value:  !Join ['', [!Ref "AWS::StackName", "-VPC" ]]
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    DependsOn: VPC
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  PublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.1.10.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [ 0, !GetAZs '']
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-Public-A
+  PublicSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.1.20.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [ 1, !GetAZs '']
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-Public-B
+  PrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Condition: PrivateSubnetsRequiredCondition
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.1.50.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs '']
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-Private-A
+  PrivateSubnetB:
+    Type: AWS::EC2::Subnet
+    Condition: PrivateSubnetsRequiredCondition
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.1.60.0/24
+      AvailabilityZone: !Select [ 1, !GetAZs '']
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-Private-B
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: Public
+  PublicRoute1:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Condition: PrivateSubnetsRequiredCondition
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: Private
+  PrivateRoute1:
+    Type: AWS::EC2::Route
+    Condition: PrivateSubnetsRequiredCondition
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway1
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    Condition: PrivateSubnetsRequiredCondition
+    DependsOn: AttachGateway
+    Properties:
+      Domain: vpc
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Condition: PrivateSubnetsRequiredCondition
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PrivateSubnetA
+  PublicSubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetA
+      RouteTableId: !Ref PublicRouteTable
+  PublicSubnetBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetB
+      RouteTableId: !Ref PublicRouteTable
+  PrivateSubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Condition: PrivateSubnetsRequiredCondition
+    Properties:
+      SubnetId: !Ref PrivateSubnetA
+      RouteTableId: !Ref PrivateRouteTable
+  PrivateSubnetBRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Condition: PrivateSubnetsRequiredCondition
+    Properties:
+      SubnetId: !Ref PrivateSubnetB
+      RouteTableId: !Ref PrivateRouteTable
+  AlbSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: ALB tier SG
+      GroupName: ALB-sg
+      VpcId: !Ref VPC
+  AlbSgIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties: 
+      Description: Ingress for ALB security group
+      GroupId: !Ref AlbSg
+      IpProtocol: "tcp"
+      FromPort: 80
+      ToPort: 80
+      CidrIp: 0.0.0.0/0 public 
+      #CidrIp: 147.236.146.231/32 private IP 
+       CidrIp: 147.236.146.231/32
+  WebTierSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Web tier SG
+      GroupName: webtier-sg
+      VpcId: !Ref VPC
+  WebTierSgIngressHttp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties: 
+      Description: Ingress for web tier security group
+      GroupId: !Ref WebTierSg
+      IpProtocol: "tcp"
+      FromPort: 80
+      ToPort: 80
+      SourceSecurityGroupId: !Ref AlbSg
+  DeploymentUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: github.deploymentuser
+      Policies:
+        - PolicyName: DeploymentUserPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:*"
+                Resource:
+                  - !GetAtt EbDeploymentBucket.Arn
+                  - !Join ['', [!GetAtt EbDeploymentBucket.Arn, '/*']]
+                  - "arn:aws:s3:::elasticbeanstalk-*"
+                  - "arn:aws:s3:::elasticbeanstalk-*/*"
+              - Effect: Allow
+                Action:
+                  - 'elasticbeanstalk:*'
+                  - 'ec2:*'
+                  - 'elasticloadbalancing:*'
+                  - 'autoscaling:*'
+                  - 'cloudwatch:*'
+                  - "logs:*"
+                  - "s3:ListAllMyBuckets"
+                  - "s3:GetBucketLocation"
+                  - "cloudformation:*"
+                Resource: '*'
+  EbDeploymentBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: aws:kms
+Outputs:
+  EbApplication:
+    Value: !Ref ApplicationName
+  EbEnvironment:
+    Value: !Ref EbPrimaryEnvironment
+  EbDeploymentBucketName:
+    Value: !Ref EbDeploymentBucket

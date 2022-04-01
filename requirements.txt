@@ -1,0 +1,12 @@
+﻿click==7.1.2
+Flask==1.0.2
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==1.1.1
+Werkzeug==1.0.1
+flask_socketio==4.3.1
+pandas_datareader==0.10.0
+yfinance==0.1.70
+numpy==1.19.1
+matplotlib==3.3.0
+pandas==1.1.0

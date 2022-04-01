@@ -1,0 +1,35 @@
+{% extends "base.html" %} 
+{% block title %} Robot Advisor {% endblock %}
+
+{% block head %}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+ {% endblock %}
+ 
+ 
+{% block content %}
+<body>
+<div>
+<img class = "center_image" src=" {{url_for('static' , filename='cover1.png')}}">
+
+</div>
+
+<div class="alert alert-dark" role="alert">
+  Important note on results : 
+  <ul>
+   <li> Past performance is no guarantee of future results, which may vary.</li>
+   <li> Investing involves taking  risk, including possible loss of capital.</li>
+   <li> All portfolio returns presented are based on past data.</li>
+   <li> The results are based on information from a variety of sources we consider reliable, but we do not represent that the information is accurate or complete.</li>
+   <li> The results do not constitute investment advice or recommendation, are provided solely for informational purposes, and are not an offer to buy or sell any securities.</li>
+   <li> The efficient frontier is based on the daily returns, and volatilities.</li>
+  </ul>
+</div>
+
+<style>
+body{
+ background-color: lightblue;
+}
+</style>
+</body>
+{% endblock %}

@@ -1,0 +1,58 @@
+WebTierSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Web tier SG
+      GroupName: webtier-sg
+      VpcId: !Ref VPC
+  WebTierSgIngressHttp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties: 
+      Description: Ingress for web tier security group
+      GroupId: !Ref WebTierSg
+      IpProtocol: "tcp"
+      FromPort: 80
+      ToPort: 80
+      SourceSecurityGroupId: !Ref AlbSg
+  DeploymentUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: github.deploymentuser
+      Policies:
+        - PolicyName: DeploymentUserPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:*"
+                Resource:
+                  - !GetAtt EbDeploymentBucket.Arn
+                  - !Join ['', [!GetAtt EbDeploymentBucket.Arn, '/*']]
+                  - "arn:aws:s3:::elasticbeanstalk-*"
+                  - "arn:aws:s3:::elasticbeanstalk-*/*"
+              - Effect: Allow
+                Action:
+                  - 'elasticbeanstalk:*'
+                  - 'ec2:*'
+                  - 'elasticloadbalancing:*'
+                  - 'autoscaling:*'
+                  - 'cloudwatch:*'
+                  - "logs:*"
+                  - "s3:ListAllMyBuckets"
+                  - "s3:GetBucketLocation"
+                  - "cloudformation:*"
+                Resource: '*'
+  EbDeploymentBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: aws:kms
+Outputs:
+  EbApplication:
+    Value: !Ref ApplicationName
+  EbEnvironment:
+    Value: !Ref EbPrimaryEnvironment
+  EbDeploymentBucketName:
+    Value: !Ref EbDeploymentBucket

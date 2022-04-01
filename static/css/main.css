@@ -1,0 +1,86 @@
+.navbar{
+ font-family:Helvetica;
+   font-size: 18px;
+ 
+}
+.row{
+ margin-top:10px;
+}
+
+
+body {
+  background-color: lightblue;
+}
+
+.display-4{
+  font-size : 38px;
+ 
+}
+
+.site-title{
+  text-align:center;
+}
+
+.top5{
+ 
+ padding-top:5%;
+ 
+}
+
+#error{
+  text-align:center;
+ 
+}
+
+.center_image{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+ 
+}
+
+
+.faqHeader {
+        font-size: 27px;
+        margin: 20px;
+    }
+
+    .panel-heading [data-toggle="collapse"]:after {
+        font-family: 'Glyphicons Halflings';
+        content: "e072"; /* "play" icon */
+        float: right;
+        color: #F58723;
+        font-size: 18px;
+        line-height: 22px;
+        /* rotate "play" icon from > (right arrow) to down arrow */
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .panel-heading [data-toggle="collapse"].collapsed:after {
+        /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        color: #454444;
+    }
+
+    .footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #173F5F;
+   color: white;
+   text-align: center;
+   width:100%;
+   height:8%;
+   font-family:Helvetica;
+   font-size: 20px;
+}

@@ -1,0 +1,139 @@
+{% extends "base.html" %} 
+{% block head %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block content %}
+
+
+<form id="form" action="#" method="post">
+
+</br>
+<div class = "site-title">
+<p class="h1">Robot Advisor - for researchers</p>
+</div>
+</br></br>
+ <div class="container">
+ <div class="row">
+    <div class="col-5">	<h2 class="display-4">Insert Stocks </h1> </div>
+  </div>
+   <div class="row">
+   </div>
+  <div class="row">
+      <div class="col-3">	<p > Stock 1 : <input type = "text" name="stock1" id="stock1" required></p></div>
+      <div class="col-3">	<p> Stock 6 : <input type = "text" name="stock6" id = "stock6" ></p></div>
+      </div>
+        <div class="row">
+    <div class="col-3">	<p> Stock 2 : <input type = "text" name="stock2" id = "stock2" required></p></div>
+    <div class="col-3">	<p> Stock 7 : <input type = "text" name="stock7" id = "stock7"></p></div>
+    </div>
+    
+      <div class="row">
+    <div class="col-3">	<p> Stock 3 : <input type = "text" name="stock3" id="stock3"></p></div>
+    <div class="col-3">	<p> Stock 8 : <input type = "text" name="stock8" id = "stock8"></p></div>
+    </div>
+     <div class="row">
+    <div class="col-3">	<p> Stock 4 : <input type = "text" name="stock4" id = "stock4"></p></div>
+    <div class="col-3">	<p> Stock 9 : <input type = "text" name="stock9" id = "stock9"></p></div>
+  </div>
+  <div class="row">
+    <div class="col-3">	<p> Stock 5 : <input type = "text" name="stock5" id = "stock5"></p></div>
+    <div class="col-3">	<p>Stock 10:<input type = "text" name="stock10" id = "stock10"></p></div>
+  </div>
+  
+</div>
+ 
+<div class="container">
+  <div class="row">
+   <div class="col-5">	<h2 class="display-4">Dates </h1> </div>
+   </div>
+   
+  <div class="row">
+    <div class="col-3">Start Year :
+     	<input type="date" id="start" name="start_year"
+       value="2016-07-22"
+       min="2015-01-01" max="2018-12-31">
+       </br>
+    </div>
+    <div class="col-3">End Year : 
+     <input type="date" id="start" name="end_year"
+       value="2018-07-22"
+       min="2018-01-01" max="2018-12-31">
+    </br>
+    </div>
+    </div>
+    
+      <div class="row " id="ttop5">
+      <div class="col-5">	<h2 class="display-4">More Variables </h1> </div>
+      </div>
+      
+      <div class="col-6 num_simulations">  	<p>Number of simulations: *  <input type = "text" name="num_portfolios"></p> </div>
+       <div class="col-2">  <input class="btn btn-primary" type="submit" value="Create Optimal Portfolios!"></div>
+    </div>
+    
+    <div class="row " id="ttop5">
+  <div class="col-5"> <div id="error"></div></div>
+
+</div>
+
+
+	
+       
+
+</form>
+
+<script defer>
+var invalid_stock = false;
+var i = i;
+const stock1 = document.getElementById('stock1');
+const stock2 = document.getElementById('stock2');
+const stock3 = document.getElementById('stock3');
+const stock4 = document.getElementById('stock4');
+const stock5 = document.getElementById('stock5');
+const stock6 = document.getElementById('stock6');
+const stock7 = document.getElementById('stock7');
+const stock8 = document.getElementById('stock8');
+const stock9 = document.getElementById('stock9');
+const stock10 = document.getElementById('stock10');
+var stock_array = [stock1,stock2,stock3,stock4,stock5,stock6,stock7,stock8,stock9,stock10];
+const form = document.getElementById('form');
+const errorElement = document.getElementById('error');
+var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+alert('test');
+form.addEventListener('submit', (e) => {
+ alert(stock_array[0].value);
+  let messages = [];
+  for(i;i<11;i++){
+    if(format.test(stock_array[i-1].value) == true){
+     alert('test');
+      invalid_stock = true;
+    }
+  }
+  if(invalid_stock){
+   message.push("One of the stocks contains illegal character\s");
+  }
+  if (name.value === '' || name.value == null) {
+    messages.push('Name is required');
+  }
+
+  if (password.value.length <= 6) {
+    messages.push('Password must be longer than 6 characters');
+  }
+
+  if (password.value.length >= 20) {
+    messages.push('Password must be less than 20 characters');
+  }
+
+  if (password.value === 'password') {
+    messages.push('Password cannot be password');
+  }
+
+  if (messages.length > 0) {
+    e.preventDefault();
+    errorElement.innerText = messages.join(', ');
+  }
+})
+</script>
+{% endblock %}
